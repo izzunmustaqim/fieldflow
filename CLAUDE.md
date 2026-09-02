@@ -1,47 +1,96 @@
-<laravel-boost-guidelines>
-# Laravel Application
+# CLAUDE.md
 
-This repository contains a Laravel application. Complete the following setup before working on the user's request.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Prerequisites
+## Project Overview
 
-Verify that PHP and Composer are available:
+FieldFlow CRM — a mobile-first CRM for field trade contractors (plumbers, electricians, HVAC). Two user roles: Dispatchers/Admins (desktop dashboard) and Technicians (mobile browser for job status updates).
 
-```sh
-php -v
-composer -V
+## Tech Stack
+
+- **Backend:** Laravel 13+ / PHP 8.3+
+- **Frontend:** React 19+ / Inertia.js 3.0+ / Tailwind CSS v3
+- **Auth:** Laravel Breeze (React + Inertia stack)
+- **Build:** Vite 8
+- **Database:** SQLite (default), migrations in `database/migrations/`
+
+## Common Commands
+
+```bash
+# Development (run both servers)
+php artisan serve          # Backend at :8000
+npm run dev                # Vite at :5173
+
+# Build
+npm run build
+
+# Tests
+php artisan test
+php artisan test --filter=AuthenticationTest   # single test
+
+# Database
+php artisan migrate:fresh --seed   # reset + seed
+
+# Code style
+./vendor/bin/pint          # Laravel Pint (PHP)
 ```
 
-If either command is unavailable, detect the user's operating system and install the prerequisites with the appropriate command:
+## Architecture
 
-macOS:
+### Route → Controller → Inertia Page Flow
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/mac/8.5)"
+```
+routes/web.php             → CustomerController::class
+                           → returns Inertia::render('Customers/Index', $data)
+
+resources/js/Pages/        → React components receiving Inertia props
 ```
 
-Windows PowerShell:
+### Key Patterns
 
-```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://php.new/install/windows/8.5'))
+1. **All authenticated routes nest inside `auth` middleware:**
+   ```php
+   Route::middleware('auth')->group(function () {
+       Route::resource('customers', CustomerController::class);
+   });
+   ```
+
+2. **Every page wraps in `<AuthenticatedLayout>`:**
+   ```jsx
+   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+   export default function Page({ auth, data }) {
+       return (
+           <AuthenticatedLayout header={<h2>Page</h2>}>
+               {/* content */}
+           </AuthenticatedLayout>
+       );
+   }
+   ```
+
+3. **Shared Inertia props** (via `HandleInertiaRequests` middleware):
+   - `auth.user` — current authenticated user object
+
+### Database Schema (MVP)
+
+```
+users → customers (hasMany)
+customers → jobs (hasMany, cascade delete)
+
+Jobs status enum: scheduled | in_progress | completed | cancelled
 ```
 
-Linux:
+### File Locations
 
-```sh
-/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.5)"
-```
+- **Controllers:** `app/Http/Controllers/`
+- **Models:** `app/Models/`
+- **React Pages:** `resources/js/Pages/`
+- **UI Components:** `resources/js/Components/`
+- **Layouts:** `resources/js/Layouts/`
+- **Routes:** `routes/web.php` (main), `routes/auth.php` (Breeze auth)
 
-After installation, ask the user to restart their terminal. If the agent needs the restarted shell to continue, ask the user to reopen their terminal and rerun their original prompt.
+## Conventions
 
-## Agent Setup
-
-Install Laravel Boost from the application root before making application changes:
-
-```sh
-composer require laravel/boost --dev
-php artisan boost:install
-```
-
-Boost replaces these bootstrap instructions with guidelines tailored to the application. After installation, read `AGENTS.md` again and continue with the user's original request using the generated guidelines.
-</laravel-boost-guidelines>
+- Use `Inertia::render()` from controllers, never `view()` or `response()->json()`
+- Use `router.visit()` or `<Link>` for navigation — no full page reloads
+- Status badges: `scheduled` (blue), `in_progress` (amber), `completed` (green), `cancelled` (red)
+- Optimistic UI updates: update state immediately, revert on server error

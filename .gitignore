@@ -1,24 +1,20 @@
-# Dependencies
-node_modules/
-
-# Build assets
-public/build/
-public/hot
-public/storage
-
-# Laravel
-storage/*.key
-vendor/
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
 .env
 .env.backup
 .env.production
 .phpunit.result.cache
-
-# IDE
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
-# OS
 .DS_Store
 Thumbs.db

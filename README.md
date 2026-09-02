@@ -15,8 +15,11 @@ A lightweight, mobile-first CRM and scheduling platform for independent local fi
 | Layer | Technology |
 |-------|------------|
 | Backend | Laravel 13 / PHP 8.3+ |
-| Frontend | React 19 / Inertia.js 3.0 |
-| Styling | Tailwind CSS v3 |
+| Frontend | React 18.2 / Inertia.js 2.0 |
+| UI Components | shadcn/ui (base-nova style, Base UI primitives) |
+| Styling | Tailwind CSS v4 |
+| Icons | lucide-react |
+| Font | Geist Variable |
 | Build | Vite 8 |
 | Auth | Laravel Breeze |
 | Database | SQLite |
@@ -66,13 +69,16 @@ Open http://localhost:8000
 ## Project Structure
 
 ```
-├── app/Http/Controllers/    # Request handling
-├── app/Models/              # Eloquent models (Customer, Job)
-├── resources/js/Pages/      # React page components
-├── resources/js/Components/  # Reusable UI components
-├── resources/js/Layouts/     # Page layouts (AuthenticatedLayout)
-├── routes/web.php           # Main routes
-└── database/migrations/     # Database schema
+├── app/Http/Controllers/        # Request handling
+├── app/Models/                  # Eloquent models (Customer, Job)
+├── resources/js/Pages/          # React page components (Inertia)
+├── resources/js/Components/     # Breeze default UI components
+├── resources/js/components/ui/  # shadcn/ui components
+├── resources/js/lib/            # Utilities (cn() helper)
+├── resources/js/Layouts/        # Page layouts (AuthenticatedLayout)
+├── routes/web.php               # Main routes
+├── database/migrations/         # Database schema
+└── resources/css/app.css        # Tailwind v4 config + design tokens
 ```
 
 ## Database Schema

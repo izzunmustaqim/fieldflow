@@ -6,7 +6,7 @@
 - [x] Verify Inertia.js is wired correctly
 - [x] Fix Vite 8 + @vitejs/plugin-react dependency conflict
 - [x] Add missing bootstrap.js for axios CSRF setup
-- [ ] Confirm shadcn/ui is initialized (`@/components/ui/` directory exists)
+- [x] Confirm shadcn/ui is initialized (`@/components/ui/` directory exists)
 - [x] Run default Breeze auth flow (register → login → dashboard) to confirm baseline works
 
 ## 2. Database & Models

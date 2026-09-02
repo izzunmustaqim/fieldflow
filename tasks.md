@@ -1,13 +1,16 @@
 # FieldFlow CRM — Implementation Tasks
 
 ## 1. Project Bootstrap
-- [ ] Scaffold Laravel project with Breeze (React + Inertia stack)
-- [ ] Verify Tailwind CSS v4+ is active and compiling
-- [ ] Verify Inertia.js 3.0+ is wired correctly
+- [x] Scaffold Laravel project with Breeze (React + Inertia stack)
+- [x] Verify Tailwind CSS is active and compiling
+- [x] Verify Inertia.js is wired correctly
+- [x] Fix Vite 8 + @vitejs/plugin-react dependency conflict
+- [x] Add missing bootstrap.js for axios CSRF setup
 - [ ] Confirm shadcn/ui is initialized (`@/components/ui/` directory exists)
-- [ ] Run default Breeze auth flow (register → login → dashboard) to confirm baseline works
+- [x] Run default Breeze auth flow (register → login → dashboard) to confirm baseline works
 
 ## 2. Database & Models
+- [ ] Configure PostgreSQL for production (SQLite for dev)
 - [ ] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
 - [ ] Create `jobs` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `timestamps`)
 - [ ] Define `Customer` model with `hasMany(Job)` relationship
@@ -48,3 +51,11 @@
 - [ ] Verify cascade delete: deleting a customer removes its jobs
 - [ ] Verify zero-refresh navigation across all pages (Inertia)
 - [ ] Clean up any unused imports, components, or routes
+
+## Completed
+- [x] Git init + initial commit
+- [x] Laravel 13 + Breeze React scaffolded
+- [x] CLAUDE.md created with project conventions
+- [x] README.md updated with project docs
+- [x] Project structure fixed (moved from nested fieldflow/ to root)
+- [x] Pushed to GitHub (git@github.com:izzunmustaqim/fieldflow.git)

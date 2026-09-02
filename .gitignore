@@ -1,18 +1,18 @@
 # Dependencies
-fieldflow/node_modules/
+node_modules/
 
 # Build assets
-fieldflow/public/build/
-fieldflow/public/hot
-fieldflow/public/storage
+public/build/
+public/hot
+public/storage
 
 # Laravel
-fieldflow/storage/*.key
-fieldflow/vendor/
-fieldflow/.env
-fieldflow/.env.backup
-fieldflow/.env.production
-fieldflow/.phpunit.result.cache
+storage/*.key
+vendor/
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
 
 # IDE
 /.fleet

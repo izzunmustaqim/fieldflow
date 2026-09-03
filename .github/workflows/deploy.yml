@@ -22,16 +22,16 @@ jobs:
           extensions: mbstring, xml, ctype, json, bcmath, pdo, pgsql
           coverage: none
 
-      - name: Install & build frontend
-        run: |
-          npm ci
-          npm run build
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+
+      - name: Install & build frontend
+        run: |
+          npm ci
+          npm run build
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
@@ -40,7 +40,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/fieldflow-crm
+            cd /opt/fieldflow
             
             # Pull latest code
             git pull origin main

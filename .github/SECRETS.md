@@ -15,7 +15,8 @@ Example: 129.146.xxx.xxx
 ### 2. SERVER_USER
 ```
 SSH username for your Oracle Cloud VM
-Example: ubuntu
+Example: deploy
+(The provision.sh script creates a 'deploy' user)
 ```
 
 ### 3. SERVER_SSH_KEY
@@ -68,18 +69,23 @@ Generate with: php artisan key:generate
 # 1. SSH into your server
 ssh -i your-key.pem ubuntu@YOUR_IP
 
-# 2. Clone repository
-git clone https://github.com/izzunmustaqim/fieldflow.git
-cd fieldflow
+# 2. Upload and run the provisioning script
+scp -i your-key.pem provision.sh ubuntu@YOUR_IP:~/
+ssh -i your-key.pem ubuntu@YOUR_IP 'sudo bash ~/provision.sh'
+# Follow prompts (repo URL, email, domain)
 
-# 3. Create .env.production
-cp .env.example .env.production
-# Edit with your production values
+# 3. SSH in as deploy user
+ssh -i your-key.pem deploy@YOUR_IP
 
-# 4. Build and start
+# 4. Edit .env.production with your secrets
+cd /opt/fieldflow
+nano .env.production
+
+# 5. Restart containers with new env
 docker compose -f docker-compose.prod.yml up -d
 
-# 5. Add GitHub Actions public key to authorized_keys
+# 6. Add GitHub Actions SSH key to authorized_keys
+# (on the server as deploy user)
 echo "your-github-actions-public-key" >> ~/.ssh/authorized_keys
 ```
 

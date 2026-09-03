@@ -81,33 +81,52 @@
 - [x] deploy.sh interactive deployment script
 - [x] DEPLOYMENT.md — complete guide for Oracle Cloud Always Free ($0/month hosting)
 
+## 10. Custom Dashboard ✅
+- [x] Build custom `Dashboard/Index.jsx` replacing Breeze default
+- [x] Create `DashboardController` with stats aggregation
+- [x] Show summary stats: total customers, active work orders, completed this week, scheduled this week
+- [x] Show upcoming scheduled work orders (next 7 days)
+- [x] Show recent activity feed (latest 10 work orders with diffForHumans timestamps)
+- [x] Quick actions section (View Customers, View Work Orders)
+- [x] Stats cards link to relevant index pages
+
+## 11. CI/CD Pipeline ✅
+- [x] Create CI workflow (`.github/workflows/ci.yml`) — runs tests + Pint on PRs
+- [x] Create CD workflow (`.github/workflows/deploy.yml`) — auto-deploy on merge to main
+- [x] Document required GitHub secrets (`.github/SECRETS.md`)
+
 ---
 
 ## Upcoming
 
-### 10. Custom Dashboard ✅
-- [x] Build custom `Dashboard/Index.jsx` replacing Breeze default
-- [x] Show summary stats: total customers, active work orders, completed this week
-- [x] Show upcoming scheduled work orders (next 7 days)
-- [x] Show recent activity feed
-
-### 11. User Roles & Permissions
+### 12. User Roles & Permissions
 - [ ] Add `role` column to `users` table (`dispatcher`, `technician`)
+- [ ] Create Role enum and add migration
 - [ ] Restrict CRUD operations to dispatchers/admins
 - [ ] Technicians: view-only assigned jobs + status updates
 - [ ] Role-based middleware or policy checks
 
-### 12. Work Order Assignment
+### 13. Work Order Assignment
 - [ ] Add `assigned_user_id` FK to `work_orders`
+- [ ] Create migration and update `WorkOrder` model
 - [ ] Assign/unassign technicians to work orders
 - [ ] Filter work orders by assigned technician
+- [ ] Dashboard shows only assigned jobs for technicians
 
-### 13. Search & Filtering
+### 14. Search & Filtering
 - [ ] Search customers by name, phone, or email
 - [ ] Filter work orders by status, date range, or customer
 - [ ] Sort tables by column headers
+- [ ] Add query parameter persistence (bookmarkable filters)
 
-### 14. Pre-Launch Tasks
+### 15. Pagination & Data Integrity
+- [ ] Implement Inertia/Laravel pagination on Index pages (Customers, Work Orders)
+- [ ] Add SoftDeletes trait to Customer and WorkOrder models
+- [ ] Create migration to add `deleted_at` column to both tables
+- [ ] Update controllers to use `withTrashed()` where needed
+- [ ] Add "Force Delete" option for admin users
+
+### 16. Pre-Launch Tasks
 - [ ] Set up mail driver (SMTP/Mailgun for password resets)
 - [ ] Test password reset flow end-to-end
 - [ ] Final responsive QA pass across all pages
@@ -116,7 +135,7 @@
 - [ ] Optimize database queries (add indexes if needed)
 - [ ] Verify all tests pass before deployment
 
-### 15. Production Deployment (Oracle Cloud)
+### 17. Production Deployment (Oracle Cloud)
 - [ ] Create Oracle Cloud Always Free account
 - [ ] Provision Ubuntu VM (1GB RAM, Always Free eligible)
 - [ ] Install Docker and Docker Compose on server
@@ -131,28 +150,16 @@
 - [ ] Configure automated database backups (daily cron job)
 - [ ] Set up UptimeRobot monitoring (free tier)
 - [ ] Test all features with real users
-
-### 15b. CI/CD Pipeline (GitHub Actions)
-- [x] Create CI workflow (`.github/workflows/ci.yml`) — runs tests + Pint on PRs
-- [x] Create CD workflow (`.github/workflows/deploy.yml`) — auto-deploy on merge to main
-- [x] Document required GitHub secrets (`.github/SECRETS.md`)
 - [ ] Configure GitHub secrets (SERVER_HOST, SERVER_USER, SERVER_SSH_KEY)
 - [ ] Test CI/CD pipeline end-to-end
 
-### 15c. Post-Deployment
+### 18. Post-Deployment
 - [ ] Document server access and credentials securely
 - [ ] Set up daily automated database backups (cron job)
 - [ ] Configure UptimeRobot monitoring (free tier)
 - [ ] Verify SSL certificate auto-renewal
 
-### 16. Data Integrity & Performance
-- [ ] Implement Inertia/Laravel pagination on Index pages (Customers, Work Orders)
-- [ ] Add SoftDeletes trait to Customer and WorkOrder models
-- [ ] Create migration to add `deleted_at` column to both tables
-- [ ] Update controllers to use `withTrashed()` where needed (e.g., showing work orders for deleted customers)
-- [ ] Add "Force Delete" option for admin users
-
-### 17. Future Enhancements (MVP+)
+### 19. Future Enhancements (MVP+)
 - [ ] File attachments/photos using Spatie Media Library for Work Orders
 - [ ] Before/after photo uploads for field technicians
 - [ ] Email notifications for job assignments and completions
@@ -161,18 +168,13 @@
 ---
 
 **📋 Recommended Order for Upcoming Work:**
-1. Section 14 (Pre-Launch) — Do first, ensures quality
-2. Section 10 (Custom Dashboard) — Most visible to users
-3. Section 11 (User Roles) — Security critical
-4. Section 12 (Work Order Assignment) — Core feature
-5. Section 13 (Search & Filtering) — Polish
-6. Section 16 (Data Integrity & Performance) — Pagination + soft deletes
-7. Section 15a (Deployment) — Deploy when core features done
-8. Section 15b (CI/CD) — Set up after first successful deployment
-9. Section 15c (Post-Deployment) — Finalize production setup
-10. Section 17 (Future Enhancements) — Optional MVP+ features
+1. Section 12 (User Roles) — Security critical, foundation for assignment
+2. Section 13 (Work Order Assignment) — Core feature, builds on roles
+3. Section 14 (Search & Filtering) — Polish, improves daily usability
+4. Section 15 (Pagination & Data Integrity) — Performance for growing data
+5. Section 16 (Pre-Launch) — Quality gates before going live
+6. Section 17 (Deployment) — Deploy when core features are solid
+7. Section 18 (Post-Deployment) — Finalize production setup
+8. Section 19 (Future Enhancements) — Optional MVP+ features
 
-**💡 CI/CD Workflow:**
-- **CI (Continuous Integration):** Every push/PR runs tests + code style checks
-- **CD (Continuous Deployment):** Merge to main auto-deploys to Oracle Cloud
-- **Result:** Push code → Tests pass → Auto-deploy → Live in ~2 minutes
+**🏗️ Project Status:** Core MVP complete (Sections 1–11). Ready for role-based features and deployment prep.

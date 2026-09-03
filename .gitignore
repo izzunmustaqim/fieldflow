@@ -6,27 +6,15 @@
 /vendor
 .env
 .env.backup
+.env.local
 .env.production
 .env.docker
-.phpunit.result.cache
 Homestead.json
 Homestead.yaml
 auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
-/.idea
-/.vscode
-/.zed
-/.claude
-/.agents
-.DS_Store
-Thumbs.db
 database/database.sqlite
-.mcp.json
-boost.json
 
-# Laravel storage (keep directory structure, ignore files)
+# Laravel cache & logs
 /storage/framework/cache/*
 !/storage/framework/cache/.gitignore
 /storage/framework/sessions/*
@@ -37,6 +25,7 @@ boost.json
 !/storage/framework/views/.gitignore
 /storage/logs/*
 !/storage/logs/.gitignore
+bootstrap/cache/*.php
 
 # Docker
 docker-compose.override.yml
@@ -46,10 +35,9 @@ backup_*.sql
 # Testing
 .phpunit.result.cache
 .phpunit.cache
-/tests/Feature/.phpunit.result.cache
-/tests/Unit/.phpunit.result.cache
+phpunit.xml.bak
 
-# PHP IDE helpers
+# PHP IDE & code style helpers
 _ide_helper.php
 .phpstorm.meta.php
 .php-cs-fixer.cache
@@ -58,3 +46,26 @@ _ide_helper.php
 # Coverage
 coverage/
 .coverage
+
+# IDEs
+/.fleet
+/.idea
+/.vscode
+/.zed
+/.claude
+/.agents
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Laravel Boost / MCP
+.mcp.json
+boost.json
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+*.log

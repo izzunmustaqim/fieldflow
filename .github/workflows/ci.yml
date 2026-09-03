@@ -44,7 +44,7 @@ jobs:
           cache: 'npm'
 
       - name: Install PHP dependencies
-        run: composer install --no-progress --prefer-dist --no-dev
+        run: composer install --no-progress --prefer-dist
 
       - name: Install Node dependencies
         run: npm ci

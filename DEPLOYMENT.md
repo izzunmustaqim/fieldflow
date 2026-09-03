@@ -60,7 +60,40 @@ docker-compose -f docker-compose.prod.yml exec app php artisan migrate --force
 
 ---
 
-## Deploy to Oracle Cloud (Always Free)
+## Automated Provisioning (Recommended)
+
+The `provision.sh` script automates the full Oracle Cloud setup:
+
+```bash
+# Copy to a fresh Ubuntu 22.04/24.04 instance
+scp provision.sh ubuntu@<SERVER_IP>:~/
+ssh ubuntu@<SERVER_IP>
+sudo bash ~/provision.sh
+```
+
+It will:
+1. Update system packages
+2. Create a `deploy` user (non-root, sudo for Docker)
+3. Install Docker + Docker Compose
+4. Configure UFW firewall (SSH, 80, 443)
+5. Set up Fail2ban for SSH protection
+6. Harden SSH (disable password auth)
+7. Clone the repository
+8. Set up SSL via Let's Encrypt (if domain provided)
+9. Configure automated daily DB backups (30-day retention)
+10. Build and start production containers
+11. Run migrations + cache warmup
+
+After provisioning, use these scripts for ongoing management:
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/deploy-update.sh` | Pull latest code, rebuild, migrate |
+| `scripts/health-check.sh` | Verify all services are healthy |
+
+---
+
+## Deploy to Oracle Cloud (Manual)
 
 ### Step 1: Create Oracle Cloud Account
 
@@ -228,10 +261,16 @@ docker compose exec postgres pg_dump -U fieldflow fieldflow > backup.sql
 # Restore database
 docker compose exec -T postgres psql -U fieldflow fieldflow < backup.sql
 
-# Update application
+# Update application (automated)
+bash scripts/deploy-update.sh
+
+# Update application (manual)
 git pull
 docker compose -f docker-compose.prod.yml build
 docker compose -f docker-compose.prod.yml up -d
+
+# Health check
+bash scripts/health-check.sh https://your-domain.com
 
 # Stop everything
 docker compose -f docker-compose.prod.yml down

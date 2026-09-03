@@ -145,6 +145,19 @@
 - [ ] Configure UptimeRobot monitoring (free tier)
 - [ ] Verify SSL certificate auto-renewal
 
+### 16. Data Integrity & Performance
+- [ ] Implement Inertia/Laravel pagination on Index pages (Customers, Work Orders)
+- [ ] Add SoftDeletes trait to Customer and WorkOrder models
+- [ ] Create migration to add `deleted_at` column to both tables
+- [ ] Update controllers to use `withTrashed()` where needed (e.g., showing work orders for deleted customers)
+- [ ] Add "Force Delete" option for admin users
+
+### 17. Future Enhancements (MVP+)
+- [ ] File attachments/photos using Spatie Media Library for Work Orders
+- [ ] Before/after photo uploads for field technicians
+- [ ] Email notifications for job assignments and completions
+- [ ] Notification preferences per user role
+
 ---
 
 **📋 Recommended Order for Upcoming Work:**
@@ -153,9 +166,11 @@
 3. Section 11 (User Roles) — Security critical
 4. Section 12 (Work Order Assignment) — Core feature
 5. Section 13 (Search & Filtering) — Polish
-6. Section 15a (Deployment) — Deploy when core features done
-7. Section 15b (CI/CD) — Set up after first successful deployment
-8. Section 15c (Post-Deployment) — Finalize production setup
+6. Section 16 (Data Integrity & Performance) — Pagination + soft deletes
+7. Section 15a (Deployment) — Deploy when core features done
+8. Section 15b (CI/CD) — Set up after first successful deployment
+9. Section 15c (Post-Deployment) — Finalize production setup
+10. Section 17 (Future Enhancements) — Optional MVP+ features
 
 **💡 CI/CD Workflow:**
 - **CI (Continuous Integration):** Every push/PR runs tests + code style checks

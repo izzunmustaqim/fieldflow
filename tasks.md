@@ -11,44 +11,49 @@
 
 ## 2. Database & Models
 - [ ] Configure PostgreSQL for production (SQLite for dev)
-- [ ] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
-- [ ] Create `jobs` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `timestamps`)
-- [ ] Define `Customer` model with `hasMany(Job)` relationship
-- [ ] Define `Job` model with `belongsTo(Customer)` relationship
-- [ ] Seed database with realistic test data (3+ customers, 5+ jobs across all statuses)
+- [x] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
+- [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `timestamps`)
+- [x] Define `Customer` model with `hasMany(WorkOrder)` relationship
+- [x] Define `WorkOrder` model with `belongsTo(Customer)` relationship
+- [x] Seed database with realistic test data (3+ customers, 5+ work orders across all statuses)
 
 ## 3. Customer CRUD
-- [ ] Build `CustomerController` (index, store, update, destroy)
-- [ ] Define resource routes nested inside `auth` middleware in `routes/web.php`
-- [ ] Build `Customers/Index.jsx` page wrapped in `<AuthenticatedLayout>`
-- [ ] Implement customer list table (name, phone, email, address)
-- [ ] Implement create/edit customer modal or inline form
-- [ ] Implement delete customer with confirmation
+- [x] Build `CustomerController` (index, store, update, destroy)
+- [x] Define resource routes nested inside `auth` middleware in `routes/web.php`
+- [x] Build `Customers/Index.jsx` page wrapped in `<AuthenticatedLayout>`
+- [x] Implement customer list table (name, phone, email, address)
+- [x] Implement create/edit customer modal or inline form
+- [x] Implement delete customer with confirmation
 
-## 4. Job CRUD
-- [ ] Build `JobController` (index, store, update, destroy)
-- [ ] Define resource routes nested inside `auth` middleware in `routes/web.php`
-- [ ] Build `Jobs/Index.jsx` page wrapped in `<AuthenticatedLayout>`
-- [ ] Implement job list table (title, customer, status, scheduled_at, estimated_cost)
-- [ ] Implement create/edit job form (dropdown for customer, datetime picker, cost input)
-- [ ] Implement delete job with confirmation
+## 4. Work Order CRUD
+- [x] Build `WorkOrderController` (index, store, update, destroy)
+- [x] Define resource routes nested inside `auth` middleware in `routes/web.php`
+- [x] Build `WorkOrders/Index.jsx` page wrapped in `<AuthenticatedLayout>`
+- [x] Implement work order list table (title, customer, status, scheduled_at, estimated_cost)
+- [x] Implement create/edit work order form (dropdown for customer, datetime picker, cost input)
+- [x] Implement delete work order with confirmation
 
-## 5. Job Status Workflow
-- [ ] Implement status update endpoint (Inertia PUT/PATCH — no page reload)
-- [ ] Add optimistic UI: status badge updates instantly before server confirms
-- [ ] Color-code status badges: `scheduled` (blue), `in_progress` (amber), `completed` (green), `cancelled` (red)
-- [ ] Handle server-side validation errors gracefully (revert optimistic state)
+## 5. Work Order Status Workflow
+- [x] Implement status update endpoint (Inertia PUT/PATCH — no page reload)
+- [x] Add optimistic UI: status badge updates instantly before server confirms
+- [x] Color-code status badges: `scheduled` (blue), `in_progress` (amber), `completed` (green), `cancelled` (red)
+- [x] Handle server-side validation errors gracefully (revert optimistic state)
 
-## 6. Responsive Layout
+## 6. Sidebar Navigation & Responsive Layout
+- [x] Replace top navbar with fixed sidebar layout (`AuthenticatedLayout.jsx`)
+- [x] Add navigation links: Dashboard, Customers, Work Orders
+- [x] Add user info & dropdown at bottom of sidebar
+- [x] Implement mobile sidebar: slides in/out with hamburger menu + backdrop
+- [x] Desktop sidebar always visible (`lg:` breakpoint), mobile sidebar hidden by default
+- [x] Sticky top bar with page header and user dropdown
 - [ ] Verify dashboard renders correctly on desktop (≥1024px)
 - [ ] Verify dashboard renders correctly on mobile (≤640px)
-- [ ] Ensure nav/shell from `<AuthenticatedLayout>` is fully responsive
 - [ ] Ensure tables are scrollable or stacked on small screens
 
 ## 7. Polish & QA
 - [ ] Confirm all routes are protected by Breeze `auth` middleware (unauthenticated → redirect to login)
-- [ ] Test full flow: login → create customer → create job → update status → delete
-- [ ] Verify cascade delete: deleting a customer removes its jobs
+- [ ] Test full flow: login → create customer → create work order → update status → delete
+- [ ] Verify cascade delete: deleting a customer removes its work orders
 - [ ] Verify zero-refresh navigation across all pages (Inertia)
 - [ ] Clean up any unused imports, components, or routes
 

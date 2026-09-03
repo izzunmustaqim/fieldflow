@@ -14,7 +14,7 @@ A lightweight, mobile-first CRM and scheduling platform for independent local fi
 
 | Layer | Technology |
 |-------|------------|
-| Backend | Laravel 13 / PHP 8.3+ |
+| Backend | Laravel 13 / PHP 8.4+ |
 | Frontend | React 19.2 / Inertia.js 3.0 |
 | UI Components | shadcn/ui (base-nova style, Base UI primitives) |
 | Styling | Tailwind CSS v4 |
@@ -28,7 +28,7 @@ A lightweight, mobile-first CRM and scheduling platform for independent local fi
 
 ### Prerequisites
 
-- PHP 8.3+
+- PHP 8.4+
 - Composer
 - Node.js 18+
 
@@ -84,9 +84,9 @@ Open http://localhost:8000
 ## Database Schema
 
 ```
-users ──1:N──> customers ──1:N──> jobs
+users ──1:N──> customers ──1:N──> work_orders
 
-jobs.status: scheduled | in_progress | completed | cancelled
+work_orders.status: scheduled | in_progress | completed | cancelled
 ```
 
 ## License

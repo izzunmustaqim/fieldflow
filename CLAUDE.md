@@ -8,7 +8,7 @@ FieldFlow CRM — a mobile-first CRM for field trade contractors (plumbers, elec
 
 ## Tech Stack
 
-- **Backend:** Laravel 13+ / PHP 8.3+
+- **Backend:** Laravel 13+ / PHP 8.4+
 - **Frontend:** React 19.2 / Inertia.js 3.0 / Tailwind CSS v4 / shadcn/ui
 - **UI Primitives:** Base UI (`@base-ui/react`) — shadcn/ui uses Base UI, not Radix
 - **Icons:** lucide-react

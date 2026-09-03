@@ -70,7 +70,7 @@ Open http://localhost:8000
 
 ```
 ├── app/Http/Controllers/        # Request handling
-├── app/Models/                  # Eloquent models (Customer, Job)
+├── app/Models/                  # Eloquent models (Customer, WorkOrder)
 ├── resources/js/Pages/          # React page components (Inertia)
 ├── resources/js/Components/     # Breeze default UI components
 ├── resources/js/components/ui/  # shadcn/ui components

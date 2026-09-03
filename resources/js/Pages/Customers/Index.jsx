@@ -87,7 +87,7 @@ export default function Index({ customers }) {
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
                         Customers
                     </h2>
-                    <PrimaryButton onClick={() => setShowCreateModal(true)}>
+                    <PrimaryButton type="button" onClick={() => setShowCreateModal(true)}>
                         Add Customer
                     </PrimaryButton>
                 </div>
@@ -243,7 +243,7 @@ export default function Index({ customers }) {
                         <SecondaryButton onClick={() => setShowCreateModal(false)}>
                             Cancel
                         </SecondaryButton>
-                        <PrimaryButton disabled={createForm.processing}>
+                        <PrimaryButton type="submit" disabled={createForm.processing}>
                             Save
                         </PrimaryButton>
                     </div>
@@ -321,7 +321,7 @@ export default function Index({ customers }) {
                         <SecondaryButton onClick={() => setShowEditModal(false)}>
                             Cancel
                         </SecondaryButton>
-                        <PrimaryButton disabled={editForm.processing}>
+                        <PrimaryButton type="submit" disabled={editForm.processing}>
                             Update
                         </PrimaryButton>
                     </div>
@@ -343,7 +343,7 @@ export default function Index({ customers }) {
                         <SecondaryButton onClick={() => setShowDeleteModal(false)}>
                             Cancel
                         </SecondaryButton>
-                        <DangerButton disabled={deleteForm.processing}>
+                        <DangerButton type="submit" disabled={deleteForm.processing}>
                             Delete
                         </DangerButton>
                     </div>

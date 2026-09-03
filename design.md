@@ -20,7 +20,7 @@
 - `timestamps`
 > Core entity representing a homeowner or business requesting field service.
 
-### `jobs` Table
+### `work_orders` Table
 - `id` (Primary Key, bigIncrements)
 - `customer_id` (foreignId, constrained to `customers.id`, cascade delete)
 - `title` (string)
@@ -40,10 +40,10 @@ app/
 ├── Http/
 │   └── Controllers/
 │       ├── CustomerController.php
-│       └── JobController.php
+│       └── WorkOrderController.php
 ├── Models/
 │   ├── Customer.php
-│   └── Job.php
+│   └── WorkOrder.php
 └── ...
 
 resources/
@@ -51,7 +51,7 @@ resources/
 │   └── Pages/
 │       ├── Customers/
 │       │   └── Index.jsx
-│       └── Jobs/
+│       └── WorkOrders/
 │           └── Index.jsx
 ├── components/
 │   └── ui/           ← shadcn/ui primitives (Button, Card, Badge, etc.)
@@ -62,12 +62,12 @@ routes/
 ```
 
 ### Route Nesting Requirement
-All customer and job routes **must** be nested inside Laravel Breeze's `auth` middleware group to guarantee authenticated access only.
+All customer and work order routes **must** be nested inside Laravel Breeze's `auth` middleware group to guarantee authenticated access only.
 
 ```php
 Route::middleware('auth')->group(function () {
     Route::resource('customers', CustomerController::class);
-    Route::resource('jobs', JobController::class);
+    Route::resource('work-orders', WorkOrderController::class);
 });
 ```
 
@@ -81,9 +81,9 @@ Every custom page component **must** import and wrap its full visual output insi
 ```jsx
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function JobsIndex({ jobs }) {
+export default function WorkOrdersIndex({ workOrders }) {
     return (
-        <AuthenticatedLayout header={<h2>Jobs</h2>}>
+        <AuthenticatedLayout header={<h2>Work Orders</h2>}>
             {/* Page content here */}
         </AuthenticatedLayout>
     );
@@ -101,7 +101,7 @@ This preserves:
 
 | Layer       | Technology              |
 |-------------|-------------------------|
-| Backend     | Laravel 13+ / PHP 8.3+  |
+| Backend     | Laravel 13+ / PHP 8.4+  |
 | Frontend    | React 19+               |
 | SPA Bridge  | Inertia.js 3.0+         |
 | CSS         | Tailwind CSS v4+        |

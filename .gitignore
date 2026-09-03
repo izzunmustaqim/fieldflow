@@ -16,5 +16,11 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.zed
+/.claude
+/.agents
 .DS_Store
 Thumbs.db
+database/database.sqlite
+.mcp.json
+boost.json

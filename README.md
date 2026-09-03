@@ -15,7 +15,7 @@ A lightweight, mobile-first CRM and scheduling platform for independent local fi
 | Layer | Technology |
 |-------|------------|
 | Backend | Laravel 13 / PHP 8.3+ |
-| Frontend | React 18.2 / Inertia.js 2.0 |
+| Frontend | React 19.2 / Inertia.js 3.0 |
 | UI Components | shadcn/ui (base-nova style, Base UI primitives) |
 | Styling | Tailwind CSS v4 |
 | Icons | lucide-react |

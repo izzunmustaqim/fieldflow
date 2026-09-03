@@ -9,12 +9,12 @@ FieldFlow CRM — a mobile-first CRM for field trade contractors (plumbers, elec
 ## Tech Stack
 
 - **Backend:** Laravel 13+ / PHP 8.3+
-- **Frontend:** React 18.2 / Inertia.js 2.0+ / Tailwind CSS v4 / shadcn/ui
+- **Frontend:** React 19.2 / Inertia.js 3.0 / Tailwind CSS v4 / shadcn/ui
 - **UI Primitives:** Base UI (`@base-ui/react`) — shadcn/ui uses Base UI, not Radix
 - **Icons:** lucide-react
 - **Font:** Geist Variable (`@fontsource-variable/geist`)
 - **Auth:** Laravel Breeze (React + Inertia stack)
-- **Build:** Vite 8 + `@vitejs/plugin-react` + `@tailwindcss/vite`
+- **Build:** Vite 8 + `@vitejs/plugin-react` 6 + `@tailwindcss/vite`
 - **Database:** SQLite (default), migrations in `database/migrations/`
 
 ## Common Commands

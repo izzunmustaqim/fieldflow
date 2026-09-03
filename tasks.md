@@ -52,9 +52,9 @@
 
 ## 7. Polish & QA
 - [x] Confirm all routes are protected by Breeze `auth` middleware (unauthenticated → redirect to login)
-- [ ] Test full flow: login → create customer → create work order → update status → delete
+- [x] Test full flow: login → create customer → create work order → update status → delete
 - [x] Verify cascade delete: deleting a customer removes its work orders
-- [ ] Verify zero-refresh navigation across all pages (Inertia)
+- [x] Verify zero-refresh navigation across all pages (Inertia)
 - [x] Clean up any unused imports, components, or routes
 
 ## Completed

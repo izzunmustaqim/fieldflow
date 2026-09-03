@@ -15,7 +15,9 @@ FieldFlow CRM — a mobile-first CRM for field trade contractors (plumbers, elec
 - **Font:** Geist Variable (`@fontsource-variable/geist`)
 - **Auth:** Laravel Breeze (React + Inertia stack)
 - **Build:** Vite 8 + `@vitejs/plugin-react` 6 + `@tailwindcss/vite`
-- **Database:** SQLite (default), migrations in `database/migrations/`
+- **Database:** SQLite (default), PostgreSQL (production), migrations in `database/migrations/`
+- **Deployment:** Docker + Oracle Cloud Always Free ($0/month)
+- **Docs:** See `DEPLOYMENT.md` for full deployment guide
 
 ## Common Commands
 
@@ -39,9 +41,46 @@ php artisan migrate:fresh --seed   # reset + seed
 
 # Add shadcn/ui components (JSX, not TSX)
 npx shadcn@latest add <component-name>
+
+# Docker Development
+./deploy.sh                # Interactive deployment menu
+docker compose up -d       # Start dev environment (app + PostgreSQL + Vite)
+docker compose down        # Stop dev environment
+docker compose logs -f     # View logs
+docker compose exec app php artisan [cmd]  # Run artisan in container
+docker compose exec app composer [cmd]     # Run composer in container
+
+# Docker Production (local testing)
+docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml exec app php artisan migrate --force
+
+# Deployment
+./deploy.sh                # Interactive menu (dev/prod/backup)
 ```
 
 ## Architecture
+
+### Docker Setup
+
+```
+FieldFlow CRM (Docker)
+├── app (PHP-FPM + Nginx)  → Port 80
+├── postgres (PostgreSQL 16)
+└── node (Vite dev server) → Port 5173
+```
+
+**Docker Files:**
+- `Dockerfile` — Multi-stage build (dev)
+- `Dockerfile.production` — Optimized with Nginx + PHP-FPM
+- `docker-compose.yml` — Local development
+- `docker-compose.prod.yml` — Production-like testing
+- `deploy.sh` — Interactive deployment menu
+- `DEPLOYMENT.md` — Complete Oracle Cloud guide
+
+**Deployment:**
+- **Hosting:** Oracle Cloud Always Free ($0/month)
+- **Database:** PostgreSQL 16
+- **CI/CD:** GitHub Actions (auto-deploy on merge to main)
 
 ### Route → Controller → Inertia Page Flow
 

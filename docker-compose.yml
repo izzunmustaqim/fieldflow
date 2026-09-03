@@ -1,0 +1,72 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: fieldflow-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:generated-key-here
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=fieldflow
+      - DB_USERNAME=fieldflow
+      - DB_PASSWORD=secret
+      - CACHE_STORE=database
+      - SESSION_DRIVER=database
+      - QUEUE_CONNECTION=database
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fieldflow-network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: fieldflow-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=fieldflow
+      - POSTGRES_USER=fieldflow
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fieldflow -d fieldflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fieldflow-network
+
+  node:
+    image: node:20-alpine
+    container_name: fieldflow-node
+    working_dir: /app
+    command: npm run dev -- --host
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    networks:
+      - fieldflow-network
+
+networks:
+  fieldflow-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

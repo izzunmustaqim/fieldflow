@@ -1,0 +1,62 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Oracle Cloud
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, json, bcmath, pdo, pgsql
+          coverage: none
+
+      - name: Install & build frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/fieldflow-crm
+            
+            # Pull latest code
+            git pull origin main
+            
+            # Build Docker image
+            docker compose -f docker-compose.prod.yml build
+            
+            # Run migrations
+            docker compose -f docker-compose.prod.yml exec -T app php artisan migrate --force
+            
+            # Restart services
+            docker compose -f docker-compose.prod.yml up -d
+            
+            # Clear cache
+            docker compose -f docker-compose.prod.yml exec -T app php artisan config:cache
+            docker compose -f docker-compose.prod.yml exec -T app php artisan route:cache
+            docker compose -f docker-compose.prod.yml exec -T app php artisan view:cache
+            
+            echo "✅ Deployment complete!"

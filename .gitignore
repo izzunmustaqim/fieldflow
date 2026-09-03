@@ -7,6 +7,7 @@
 .env
 .env.backup
 .env.production
+.env.docker
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -24,3 +25,36 @@ Thumbs.db
 database/database.sqlite
 .mcp.json
 boost.json
+
+# Laravel storage (keep directory structure, ignore files)
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Docker
+docker-compose.override.yml
+*.sql
+backup_*.sql
+
+# Testing
+.phpunit.result.cache
+.phpunit.cache
+/tests/Feature/.phpunit.result.cache
+/tests/Unit/.phpunit.result.cache
+
+# PHP IDE helpers
+_ide_helper.php
+.phpstorm.meta.php
+.php-cs-fixer.cache
+.pint.cache
+
+# Coverage
+coverage/
+.coverage

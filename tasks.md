@@ -10,7 +10,7 @@
 - [x] Run default Breeze auth flow (register → login → dashboard) to confirm baseline works
 
 ## 2. Database & Models
-- [ ] Configure PostgreSQL for production (SQLite for dev)
+- [x] Configure PostgreSQL for production (SQLite for dev)
 - [x] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
 - [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `timestamps`)
 - [x] Define `Customer` model with `hasMany(WorkOrder)` relationship
@@ -46,16 +46,16 @@
 - [x] Implement mobile sidebar: slides in/out with hamburger menu + backdrop
 - [x] Desktop sidebar always visible (`lg:` breakpoint), mobile sidebar hidden by default
 - [x] Sticky top bar with page header and user dropdown
-- [ ] Verify dashboard renders correctly on desktop (≥1024px)
-- [ ] Verify dashboard renders correctly on mobile (≤640px)
-- [ ] Ensure tables are scrollable or stacked on small screens
+- [x] Verify dashboard renders correctly on desktop (≥1024px)
+- [x] Verify dashboard renders correctly on mobile (≤640px)
+- [x] Ensure tables are scrollable or stacked on small screens
 
 ## 7. Polish & QA
-- [ ] Confirm all routes are protected by Breeze `auth` middleware (unauthenticated → redirect to login)
+- [x] Confirm all routes are protected by Breeze `auth` middleware (unauthenticated → redirect to login)
 - [ ] Test full flow: login → create customer → create work order → update status → delete
-- [ ] Verify cascade delete: deleting a customer removes its work orders
+- [x] Verify cascade delete: deleting a customer removes its work orders
 - [ ] Verify zero-refresh navigation across all pages (Inertia)
-- [ ] Clean up any unused imports, components, or routes
+- [x] Clean up any unused imports, components, or routes
 
 ## Completed
 - [x] Git init + initial commit

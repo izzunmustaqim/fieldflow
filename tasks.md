@@ -85,11 +85,11 @@
 
 ## Upcoming
 
-### 10. Custom Dashboard
-- [ ] Build custom `Dashboard/Index.jsx` replacing Breeze default
-- [ ] Show summary stats: total customers, active work orders, completed this week
-- [ ] Show upcoming scheduled work orders (next 7 days)
-- [ ] Show recent activity feed
+### 10. Custom Dashboard ✅
+- [x] Build custom `Dashboard/Index.jsx` replacing Breeze default
+- [x] Show summary stats: total customers, active work orders, completed this week
+- [x] Show upcoming scheduled work orders (next 7 days)
+- [x] Show recent activity feed
 
 ### 11. User Roles & Permissions
 - [ ] Add `role` column to `users` table (`dispatcher`, `technician`)

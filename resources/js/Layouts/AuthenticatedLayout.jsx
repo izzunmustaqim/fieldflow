@@ -56,7 +56,7 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="flex h-full flex-col">
                     {/* Logo */}
                     <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-6">
-                        <Link href="/" className="flex items-center gap-2">
+                        <Link href="/dashboard" className="flex items-center gap-2">
                             <ApplicationLogo className="h-8 w-auto fill-current text-gray-800" />
                             <span className="text-lg font-bold text-gray-900">FieldFlow</span>
                         </Link>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WorkOrderController;
 use Illuminate\Foundation\Application;
@@ -16,22 +17,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-
-    return Inertia::render('Dashboard', [
-        'stats' => [
-            'total_customers' => $user->customers()->count(),
-            'active_work_orders' => $user->customers()->withCount('workOrders')->get()->sum('work_orders_count'),
-            'scheduled_this_week' => \App\Models\WorkOrder::whereHas('customer', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-                ->where('status', 'scheduled')
-                ->whereBetween('scheduled_at', [now()->startOfWeek(), now()->endOfWeek()])
-                ->count(),
-        ],
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

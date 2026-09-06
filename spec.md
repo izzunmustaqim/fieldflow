@@ -12,7 +12,7 @@ A lightweight, mobile-first CRM and scheduling platform built for independent lo
 - **Data Architecture:** A relational ownership chain: `Users → Customers → Work Orders`.
 - **Work Order Management:** Full CRUD for work orders with status transitions (scheduled → in_progress → completed/cancelled), scheduling, and cost tracking.
 - **Customer Management:** Full CRUD for customer records with work order counts.
-- **Dashboard:** Summary stats (total customers, active orders, completed this week, scheduled this week), upcoming scheduled orders (next 7 days), and recent activity feed.
+- **Dashboard:** Summary stats (total customers, active orders, completed this week, scheduled this week), upcoming scheduled orders (next 7 days), and recent activity feed (work order created, status changed, or customer added).
 - **UI Architecture:** Fully responsive dashboard using React + Inertia.js SPA with shadcn/ui component primitives.
 - **Performance:** Instant, zero-refresh navigation powered by Inertia.js with server-side form validation.
 
@@ -45,12 +45,14 @@ A lightweight, mobile-first CRM and scheduling platform built for independent lo
 |---|---|---|
 | id | integer | PK |
 | customer_id | integer | FK → customers.id |
+| user_id | integer | FK → users.id (assigned technician) |
 | title | varchar | Required |
 | description | text | Nullable |
 | scheduled_at | datetime | Required |
 | estimated_cost | numeric | Nullable |
 | actual_cost | numeric | Nullable |
 | status | varchar | Enum: `scheduled`, `in_progress`, `completed`, `cancelled` |
+| status_changed_at | datetime | Updated on every status transition |
 | created_at / updated_at | datetime | Timestamps |
 
 ## Pages & Routes
@@ -61,8 +63,11 @@ A lightweight, mobile-first CRM and scheduling platform built for independent lo
 | `/register` | Auth/Register | Registration form |
 | `/dashboard` | Dashboard | Stats cards, upcoming work orders, recent activity |
 | `/customers` | Customers/Index | Customer list, create/edit/delete modals |
+| `/customers/{id}` | Customers/Show | Customer detail view with their work orders |
 | `/work-orders` | WorkOrders/Index | Work order list, create/edit/delete modals, status updates |
 | `/profile` | Profile/Edit | Profile info, password change, account deletion |
+
+> **Note:** `/profile` is lowest priority for MVP — defer if timeline is tight.
 
 ## Technical Constraints
 - **Backend:** Laravel 13.30.1 / PHP 8.4
@@ -74,3 +79,8 @@ A lightweight, mobile-first CRM and scheduling platform built for independent lo
 - **Build Tool:** Vite 8.2 with `@vitejs/plugin-react`
 - **Icons:** Lucide React
 - **Forms:** Inertia `useForm` with server-side validation + `router.reload()` for zero-refresh updates
+
+## MVP Out of Scope (Post-MVP)
+- **Notifications:** No real-time push or email notifications in MVP; technicians refresh to see new assignments
+- **Cost Tracking:** Optional in MVP — `actual_cost` field exists but not required on status change to completed
+- **Multi-technician assignment:** Work orders can only be assigned to one technician per MVP

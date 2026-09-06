@@ -12,9 +12,9 @@
 ## 2. Database & Models ✅
 - [x] Configure PostgreSQL for production (SQLite for dev)
 - [x] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
-- [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `timestamps`)
+- [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `user_id` FK → assigned technician, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `status_changed_at`, `timestamps`)
 - [x] Define `Customer` model with `hasMany(WorkOrder)` relationship
-- [x] Define `WorkOrder` model with `belongsTo(Customer)` relationship
+- [x] Define `WorkOrder` model with `belongsTo(Customer)` and `belongsTo(User)` relationships
 - [x] Seed database with realistic test data (3+ customers, 5+ work orders across all statuses)
 
 ## 3. Customer CRUD ✅
@@ -29,8 +29,8 @@
 - [x] Build `WorkOrderController` (index, store, update, destroy)
 - [x] Define resource routes nested inside `auth` middleware in `routes/web.php`
 - [x] Build `WorkOrders/Index.jsx` page wrapped in `<AuthenticatedLayout>`
-- [x] Implement work order list table (title, customer, status, scheduled_at, estimated_cost)
-- [x] Implement create/edit work order form (dropdown for customer, datetime picker, cost input)
+- [x] Implement work order list table (title, customer, assigned technician, status, scheduled_at, estimated_cost)
+- [x] Implement create/edit work order form (dropdown for customer, dropdown for assigned technician, datetime picker, cost input)
 - [x] Implement delete work order with confirmation
 
 ## 5. Work Order Status Workflow ✅
@@ -38,6 +38,7 @@
 - [x] Add optimistic UI: status badge updates instantly before server confirms
 - [x] Color-code status badges: `scheduled` (blue), `in_progress` (amber), `completed` (green), `cancelled` (red)
 - [x] Handle server-side validation errors gracefully (revert optimistic state)
+- [x] Update `status_changed_at` on every status transition
 
 ## 6. Sidebar Navigation & Responsive Layout ✅
 - [x] Replace top navbar with fixed sidebar layout (`AuthenticatedLayout.jsx`)
@@ -89,6 +90,7 @@
 - [x] Show recent activity feed (latest 10 work orders with diffForHumans timestamps)
 - [x] Quick actions section (View Customers, View Work Orders)
 - [x] Stats cards link to relevant index pages
+- [x] Build `Customers/Show.jsx` — customer detail page with their work orders
 
 ## 11. CI/CD Pipeline ✅
 - [x] Create CI workflow (`.github/workflows/ci.yml`) — runs tests + Pint on PRs
@@ -99,19 +101,18 @@
 
 ## Upcoming
 
-### 12. User Roles & Permissions
+### 12. Work Order Assignment (Filtering & Dashboard)
+- [ ] Filter work orders by assigned technician (user_id)
+- [ ] Dashboard shows only assigned jobs for technicians
+- [ ] Dispatcher/admin sees all work orders
+- [ ] Add technician dropdown filter to Work Orders Index page
+
+### 13. User Roles & Permissions
 - [ ] Add `role` column to `users` table (`dispatcher`, `technician`)
 - [ ] Create Role enum and add migration
 - [ ] Restrict CRUD operations to dispatchers/admins
 - [ ] Technicians: view-only assigned jobs + status updates
 - [ ] Role-based middleware or policy checks
-
-### 13. Work Order Assignment
-- [ ] Add `assigned_user_id` FK to `work_orders`
-- [ ] Create migration and update `WorkOrder` model
-- [ ] Assign/unassign technicians to work orders
-- [ ] Filter work orders by assigned technician
-- [ ] Dashboard shows only assigned jobs for technicians
 
 ### 14. Search & Filtering
 - [ ] Search customers by name, phone, or email
@@ -168,8 +169,8 @@
 ---
 
 **📋 Recommended Order for Upcoming Work:**
-1. Section 12 (User Roles) — Security critical, foundation for assignment
-2. Section 13 (Work Order Assignment) — Core feature, builds on roles
+1. Section 12 (Work Order Assignment Filtering) — Complete the user_id feature already in the schema
+2. Section 13 (User Roles) — Security critical, foundation for role-based access
 3. Section 14 (Search & Filtering) — Polish, improves daily usability
 4. Section 15 (Pagination & Data Integrity) — Performance for growing data
 5. Section 16 (Pre-Launch) — Quality gates before going live
@@ -177,4 +178,4 @@
 7. Section 18 (Post-Deployment) — Finalize production setup
 8. Section 19 (Future Enhancements) — Optional MVP+ features
 
-**🏗️ Project Status:** Core MVP complete (Sections 1–11). Ready for role-based features and deployment prep.
+**🏗️ Project Status:** Core MVP complete (Sections 1–11). Schema supports technician assignment (`user_id` on work_orders). Next: filtering logic + user roles.

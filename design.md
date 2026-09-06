@@ -30,18 +30,21 @@
 ### `work_orders` Table
 - `id` (Primary Key, bigIncrements)
 - `customer_id` (foreignId, constrained to `customers.id`, cascade delete)
+- `user_id` (foreignId, constrained to `users.id`) — assigned technician
 - `title` (string)
 - `description` (text, nullable)
 - `scheduled_at` (dateTime)
 - `estimated_cost` (decimal 10,2, nullable)
 - `actual_cost` (decimal 10,2, nullable)
 - `status` (string, default: `scheduled`)
+- `status_changed_at` (dateTime, nullable) — updated on every status transition
 - `timestamps`
-> Represents a discrete service call. Cascade-deletes with its parent customer. Access is controlled by traversing the `customer.user_id` relationship.
+> Represents a discrete service call. Cascade-deletes with its parent customer. Directly assigned to a technician via `user_id`. Access is controlled by traversing the `customer.user_id` relationship.
 
 ### Relationships
 ```
 users → customers (hasMany via user_id)
+users → work_orders (hasMany via user_id — assigned technician)
 customers → work_orders (hasMany via customer_id, cascade delete)
 ```
 
@@ -75,7 +78,8 @@ resources/
 │   ├── Pages/
 │   │   ├── Auth/                    ← Login, Register, ForgotPassword, etc.
 │   │   ├── Customers/
-│   │   │   └── Index.jsx            ← CRUD via modal dialogs
+│   │   │   ├── Index.jsx            ← CRUD via modal dialogs
+│   │   │   └── Show.jsx             ← Customer detail + work orders
 │   │   ├── Dashboard.jsx            ← Stats + upcoming + recent activity
 │   │   ├── Profile/
 │   │   │   ├── Edit.jsx
@@ -109,7 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy']);
 
     // CRUD resources (except show/edit/create — inline modals only)
-    Route::resource('customers', CustomerController::class)->except(['show', 'edit', 'create']);
+    Route::resource('customers', CustomerController::class)->except(['edit', 'create']);
     Route::resource('work-orders', WorkOrderController::class)->except(['show', 'edit', 'create']);
 });
 ```
@@ -169,10 +173,15 @@ protected function authorize(Customer $customer): void {
     }
 }
 
-// WorkOrder ownership (traverse through customer)
+// WorkOrder ownership — two valid paths:
+// 1. Direct: work_order.user_id === auth()->id() (assigned technician)
+// 2. Indirect: work_order.customer.user_id === auth()->id() (dispatcher/admin who owns the customer)
 protected function authorizeWorkOrder(Request $request, WorkOrder $workOrder): void {
     $workOrder->load('customer');
-    if ($workOrder->customer->user_id !== $request->user()->id()) {
+    $isAssignedTechnician = $workOrder->user_id === $request->user()->id();
+    $isCustomerOwner = $workOrder->customer->user_id === $request->user()->id();
+
+    if (! $isAssignedTechnician && ! $isCustomerOwner) {
         abort(403);
     }
 }
@@ -187,6 +196,9 @@ The `DashboardController` (invokable) provides summary stats via `Inertia::rende
 - **Stats:** total customers, active (in_progress) work orders, completed this week, scheduled this week
 - **Upcoming Work Orders:** next 7 days, limited to 5, eager-loaded with customer
 - **Recent Activity:** latest 10 work orders, ordered by `updated_at` desc
+- **Technician View:** Technicians see only work orders where `user_id = auth()->id()`; dispatchers/admins see all
+
+> **Note:** For MVP, all users are dispatchers/admins. Technician filtering applies when work order assignment is used (user_id populated).
 
 ---
 

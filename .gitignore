@@ -69,3 +69,6 @@ boost.json
 npm-debug.log*
 yarn-error.log*
 *.log
+
+# Composer installer (temporary setup script)
+composer-setup.php

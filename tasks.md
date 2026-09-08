@@ -1,6 +1,10 @@
 # FieldFlow CRM — Implementation Tasks
 
+> 📋 **Cross-references:** Each section links to detailed specs in `.claude/specs/` — see module-specific files (`authentication.md`, `customers.md`, `work-orders.md`, `dashboard.md`, `infrastructure.md`)
+
 ## 1. Project Bootstrap ✅
+> 📋 **Spec:** `.claude/specs/authentication.md` — See domain rules and schema
+
 - [x] Scaffold Laravel project with Breeze (React + Inertia stack)
 - [x] Verify Tailwind CSS is active and compiling
 - [x] Verify Inertia.js is wired correctly
@@ -10,14 +14,18 @@
 - [x] Run default Breeze auth flow (register → login → dashboard) to confirm baseline works
 
 ## 2. Database & Models ✅
+> 📋 **Spec:** See `.claude/specs/customers.md` and `.claude/specs/work-orders.md` for schema details
+
 - [x] Configure PostgreSQL for production (SQLite for dev)
-- [x] Create `customers` migration (`name`, `phone`, `email`, `address`, `timestamps`)
-- [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `user_id` FK → assigned technician, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `status_changed_at`, `timestamps`)
-- [x] Define `Customer` model with `hasMany(WorkOrder)` relationship
-- [x] Define `WorkOrder` model with `belongsTo(Customer)` and `belongsTo(User)` relationships
+- [x] Create `customers` migration (`user_id` FK → owner, `name`, `phone`, `email`, `address`, `notes`, `timestamps`)
+- [x] Create `work_orders` migration (`customer_id` FK → cascade delete, `title`, `description`, `status` enum, `scheduled_at`, `estimated_cost`, `actual_cost`, `timestamps`)
+- [x] Define `Customer` model with `belongsTo(User)` and `hasMany(WorkOrder)` relationships
+- [x] Define `WorkOrder` model with `belongsTo(Customer)` relationship
 - [x] Seed database with realistic test data (3+ customers, 5+ work orders across all statuses)
 
 ## 3. Customer CRUD ✅
+> 📋 **Spec:** `.claude/specs/customers.md` — See domain rules, schema, and acceptance criteria
+
 - [x] Build `CustomerController` (index, store, update, destroy)
 - [x] Define resource routes nested inside `auth` middleware in `routes/web.php`
 - [x] Build `Customers/Index.jsx` page wrapped in `<AuthenticatedLayout>`
@@ -26,21 +34,28 @@
 - [x] Implement delete customer with confirmation
 
 ## 4. Work Order CRUD ✅
+> 📋 **Spec:** `.claude/specs/work-orders.md` — See domain rules, schema, and acceptance criteria
+
 - [x] Build `WorkOrderController` (index, store, update, destroy)
 - [x] Define resource routes nested inside `auth` middleware in `routes/web.php`
 - [x] Build `WorkOrders/Index.jsx` page wrapped in `<AuthenticatedLayout>`
-- [x] Implement work order list table (title, customer, assigned technician, status, scheduled_at, estimated_cost)
-- [x] Implement create/edit work order form (dropdown for customer, dropdown for assigned technician, datetime picker, cost input)
+- [x] Implement work order list table (title, customer, status, scheduled_at, estimated_cost)
+- [x] Implement create/edit work order form (dropdown for customer, datetime picker, cost input)
 - [x] Implement delete work order with confirmation
+- [ ] ~~Assign technician to work orders~~ — **Not implemented**: `user_id` on `work_orders` missing (see Section 12)
 
 ## 5. Work Order Status Workflow ✅
+> 📋 **Spec:** `.claude/specs/work-orders.md` — See Status Management acceptance criteria
+
 - [x] Implement status update endpoint (Inertia PUT/PATCH — no page reload)
 - [x] Add optimistic UI: status badge updates instantly before server confirms
 - [x] Color-code status badges: `scheduled` (blue), `in_progress` (amber), `completed` (green), `cancelled` (red)
 - [x] Handle server-side validation errors gracefully (revert optimistic state)
-- [x] Update `status_changed_at` on every status transition
+- [ ] ~~Update `status_changed_at` on every status transition~~ — **Not implemented**: `status_changed_at` column missing from `work_orders` table (spec gap — see Section 12)
 
 ## 6. Sidebar Navigation & Responsive Layout ✅
+> 📋 **Spec:** `.claude/specs/dashboard.md` — See layout patterns and technical constraints
+
 - [x] Replace top navbar with fixed sidebar layout (`AuthenticatedLayout.jsx`)
 - [x] Add navigation links: Dashboard, Customers, Work Orders
 - [x] Add user info & dropdown at bottom of sidebar
@@ -52,25 +67,32 @@
 - [x] Ensure tables are scrollable or stacked on small screens
 
 ## 7. Testing & Factories ✅
+> 📋 **Spec:** See module-level `.claude/specs/*.md` for acceptance criteria
+
 - [x] Create `CustomerFactory` and `WorkOrderFactory` for test data generation
 - [x] Write `CustomerTest` — full CRUD feature tests (index, store, update, destroy)
 - [x] Write `WorkOrderTest` — full CRUD feature tests (index, store, update, destroy)
 - [x] Verify Breeze auth tests pass (Authentication, Registration, PasswordReset, etc.)
+- [x] Health check endpoint test (`HealthCheckTest.php`) passes
 - [x] All tests pass with `php artisan test`
 
 ## 8. Project Infrastructure ✅
+> 📋 **Spec:** `.claude/specs/` — See module-level `.md` files (see `README.md` for index)
+
 - [x] CLAUDE.md created with project conventions, architecture, and commands
 - [x] AGENTS.md created with Laravel Boost guidelines
 - [x] boost.json configured (MCP, skills, agent support)
-- [x] design.md created with database schema and folder architecture
-- [x] spec.md created with product specification and MVP scope
+- [x] Module specs created: `authentication.md`, `customers.md`, `work-orders.md`, `dashboard.md`, `infrastructure.md`
 - [x] .env.example cleaned up — FieldFlow naming, organized sections, commented production defaults
 - [x] README.md updated with project docs
 - [x] Git init + initial commit
 - [x] Project structure fixed (moved from nested fieldflow/ to root)
 - [x] Pushed to GitHub (git@github.com:izzunmustaqim/fieldflow.git)
+- [x] Health check endpoint (`/health`) for Docker/load balancer monitoring
 
 ## 9. Docker & Deployment ✅
+> 📋 **Spec:** `.claude/specs/infrastructure.md` — See Docker services, deployment, and acceptance criteria
+
 - [x] Multi-stage Dockerfile for development (Node + PHP)
 - [x] Production Dockerfile with Nginx + PHP-FPM
 - [x] docker-compose.yml for local development with PostgreSQL
@@ -83,6 +105,9 @@
 - [x] DEPLOYMENT.md — complete guide for Oracle Cloud Always Free ($0/month hosting)
 
 ## 10. Custom Dashboard ✅
+> 📋 **Spec:** `.claude/specs/dashboard.md` — See spec for dashboard components and data structure
+> ⚠️ **Note:** `completedThisWeek` uses `updated_at` as fallback since `status_changed_at` column doesn't exist yet
+
 - [x] Build custom `Dashboard/Index.jsx` replacing Breeze default
 - [x] Create `DashboardController` with stats aggregation
 - [x] Show summary stats: total customers, active work orders, completed this week, scheduled this week
@@ -90,9 +115,11 @@
 - [x] Show recent activity feed (latest 10 work orders with diffForHumans timestamps)
 - [x] Quick actions section (View Customers, View Work Orders)
 - [x] Stats cards link to relevant index pages
-- [x] Build `Customers/Show.jsx` — customer detail page with their work orders
+- [ ] Build `Customers/Show.jsx` — customer detail page with their work orders (**not yet created**)
 
 ## 11. CI/CD Pipeline ✅
+> 📋 **Spec:** `.claude/specs/infrastructure.md` — See Deployment acceptance criteria
+
 - [x] Create CI workflow (`.github/workflows/ci.yml`) — runs tests + Pint on PRs
 - [x] Create CD workflow (`.github/workflows/deploy.yml`) — auto-deploy on merge to main
 - [x] Document required GitHub secrets (`.github/SECRETS.md`)
@@ -102,6 +129,14 @@
 ## Upcoming
 
 ### 12. Work Order Assignment (Filtering & Dashboard)
+> 📋 **Spec:** `.claude/specs/work-orders.md` — See Relationships & Schema sections
+> ⚠️ **Schema Gap:** Specs define `user_id` FK on `work_orders` for direct technician assignment, but migration was never created. Current implementation scopes via `customer.user_id` chain only.
+
+- [ ] Add migration: `user_id` FK → `users.id` (nullable) on `work_orders` table
+- [ ] Add migration: `status_changed_at` column on `work_orders` table
+- [ ] Update `WorkOrder` model: add `user_id` to fillable, add `user()` relationship
+- [ ] Update `WorkOrderController` to assign technician on create/update
+- [ ] Update `status_changed_at` on every status transition
 - [ ] Filter work orders by assigned technician (user_id)
 - [ ] Dashboard shows only assigned jobs for technicians
 - [ ] Dispatcher/admin sees all work orders
@@ -128,6 +163,8 @@
 - [ ] Add "Force Delete" option for admin users
 
 ### 16. Pre-Launch Tasks
+> 📋 **Spec:** `.claude/specs/authentication.md` — See Login and Profile acceptance criteria
+
 - [ ] Set up mail driver (SMTP/Mailgun for password resets)
 - [ ] Test password reset flow end-to-end
 - [ ] Final responsive QA pass across all pages
@@ -137,6 +174,8 @@
 - [ ] Verify all tests pass before deployment
 
 ### 17. Production Deployment (Oracle Cloud)
+> 📋 **Spec:** `.claude/specs/infrastructure.md` — See Deployment acceptance criteria
+
 - [ ] Create Oracle Cloud Always Free account
 - [ ] Provision Ubuntu VM (1GB RAM, Always Free eligible)
 - [ ] Install Docker and Docker Compose on server
@@ -155,12 +194,16 @@
 - [ ] Test CI/CD pipeline end-to-end
 
 ### 18. Post-Deployment
+> 📋 **Spec:** `.claude/specs/infrastructure.md` — See Deployment acceptance criteria
+
 - [ ] Document server access and credentials securely
 - [ ] Set up daily automated database backups (cron job)
 - [ ] Configure UptimeRobot monitoring (free tier)
 - [ ] Verify SSL certificate auto-renewal
 
 ### 19. Future Enhancements (MVP+)
+> 📋 **Spec:** Create new feature sections in `.claude/specs/work-orders.md` as needed
+
 - [ ] File attachments/photos using Spatie Media Library for Work Orders
 - [ ] Before/after photo uploads for field technicians
 - [ ] Email notifications for job assignments and completions
@@ -169,7 +212,7 @@
 ---
 
 **📋 Recommended Order for Upcoming Work:**
-1. Section 12 (Work Order Assignment Filtering) — Complete the user_id feature already in the schema
+1. Section 12 (Work Order Assignment & Schema Gap) — Add missing migrations (`user_id`, `status_changed_at`), implement technician assignment
 2. Section 13 (User Roles) — Security critical, foundation for role-based access
 3. Section 14 (Search & Filtering) — Polish, improves daily usability
 4. Section 15 (Pagination & Data Integrity) — Performance for growing data
@@ -178,4 +221,4 @@
 7. Section 18 (Post-Deployment) — Finalize production setup
 8. Section 19 (Future Enhancements) — Optional MVP+ features
 
-**🏗️ Project Status:** Core MVP complete (Sections 1–11). Schema supports technician assignment (`user_id` on work_orders). Next: filtering logic + user roles.
+**🏗️ Project Status:** Core MVP mostly complete (Sections 1–11), with schema gaps in work order assignment (`user_id` and `status_changed_at` not yet migrated). `Customers/Show.jsx` detail page not yet built. Next: complete Section 12 schema + assignment logic, then user roles.
